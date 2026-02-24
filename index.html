@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Release Notes</title>
+  <meta name="description" content="제품 업데이트 및 릴리즈 노트" />
+
+  <style>
+    /*
+      Responsive, accessible baseline
+      - Fluid type/spacing via clamp()
+      - Layout scales from mobile → desktop
+      - Prefers-reduced-motion respected
+      - No external assets required
+    */
+
+    :root {
+      /* spacing scale */
+      --space-1: clamp(6px, 0.6vw, 10px);
+      --space-2: clamp(10px, 1vw, 16px);
+      --space-3: clamp(14px, 1.4vw, 22px);
+      --space-4: clamp(18px, 2vw, 28px);
+      --space-5: clamp(24px, 2.8vw, 40px);
+      --space-6: clamp(32px, 4vw, 56px);
+
+      /* typography */
+      --fs-1: clamp(12px, 1.2vw, 14px);
+      --fs-2: clamp(14px, 1.4vw, 16px);
+      --fs-3: clamp(16px, 1.7vw, 18px);
+      --fs-4: clamp(18px, 2.2vw, 22px);
+      --fs-5: clamp(22px, 3vw, 32px);
+      --fs-6: clamp(28px, 4vw, 44px);
+
+      --radius-1: 10px;
+      --radius-2: 14px;
+      --radius-3: 18px;
+
+      --shadow-1: 0 10px 30px rgba(0,0,0,.08);
+      --shadow-2: 0 18px 50px rgba(0,0,0,.12);
+
+      /* layout */
+      --container: min(1120px, calc(100% - 2 * var(--space-4)));
+
+      /* light theme */
+      --bg: #0b0e14;
+      --bg-2: #0f1420;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-2: rgba(255, 255, 255, 0.10);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.72);
+      --muted-2: rgba(255, 255, 255, 0.58);
+      --accent: #6ee7ff;
+      --accent-2: #a78bfa;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+
+      --focus: 0 0 0 4px rgba(110, 231, 255, 0.25);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f7fb;
+        --bg-2: #eef1f8;
+        --surface: rgba(17, 24, 39, 0.04);
+        --surface-2: rgba(17, 24, 39, 0.07);
+        --border: rgba(17, 24, 39, 0.10);
+        --text: rgba(17, 24, 39, 0.94);
+        --muted: rgba(17, 24, 39, 0.72);
+        --muted-2: rgba(17, 24, 39, 0.56);
+        --focus: 0 0 0 4px rgba(59, 130, 246, 0.22);
+      }
+    }
+
+    /* Explicit theme override via <html data-theme="...">.
+       This must come AFTER the prefers-color-scheme block to override it. */
+    :root[data-theme="dark"] {
+      --bg: #0b0e14;
+      --bg-2: #0f1420;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-2: rgba(255, 255, 255, 0.10);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.72);
+      --muted-2: rgba(255, 255, 255, 0.58);
+      --accent: #6ee7ff;
+      --accent-2: #a78bfa;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --focus: 0 0 0 4px rgba(110, 231, 255, 0.25);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f6f7fb;
+      --bg-2: #eef1f8;
+      --surface: rgba(17, 24, 39, 0.04);
+      --surface-2: rgba(17, 24, 39, 0.07);
+      --border: rgba(17, 24, 39, 0.10);
+      --text: rgba(17, 24, 39, 0.94);
+      --muted: rgba(17, 24, 39, 0.72);
+      --muted-2: rgba(17, 24, 39, 0.56);
+      --focus: 0 0 0 4px rgba(59, 130, 246, 0.22);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+      font-size: var(--fs-2);
+      line-height: 1.55;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% -10%, rgba(167,139,250,.32), transparent 60%),
+        radial-gradient(900px 600px at 90% 0%, rgba(110,231,255,.28), transparent 60%),
+        radial-gradient(700px 500px at 70% 110%, rgba(52,211,153,.20), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .container { width: var(--container); margin: 0 auto; }
+
+    /* Top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding: var(--space-2) 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand__mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow-1);
+    }
+
+    .brand__name { font-size: var(--fs-3); }
+
+    .nav {
+      display: none;
+      align-items: center;
+      gap: var(--space-3);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: var(--fs-1);
+    }
+
+    @media (min-width: 920px) {
+      .nav { display: inline-flex; }
+    }
+
+    .actions {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: var(--fs-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: color-mix(in srgb, var(--surface-2) 80%, transparent);
+      border-color: color-mix(in srgb, var(--border) 40%, var(--accent));
+      text-decoration: none;
+    }
+
+    .btn:focus-visible { outline: none; box-shadow: var(--focus); }
+
+    .btn--primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0e14;
+    }
+
+    .btn--primary:hover { filter: saturate(1.05); }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    /* Hero */
+    .hero {
+      padding: var(--space-6) 0 var(--space-5);
+    }
+
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+
+    @media (min-width: 920px) {
+      .hero__grid {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: var(--space-6);
+        align-items: center;
+      }
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: var(--fs-1);
+    }
+
+    .kicker__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--good);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--good) 25%, transparent);
+    }
+
+    h1 {
+      margin: var(--space-3) 0 var(--space-2);
+      font-size: var(--fs-6);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 0 0 var(--space-4);
+      color: var(--muted);
+      font-size: var(--fs-4);
+      letter-spacing: -0.02em;
+    }
+
+    .hero__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 65%, transparent);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: var(--fs-1);
+    }
+
+    .chip strong { color: var(--text); }
+
+    /* Sidebar panel */
+    .panel {
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 72%, transparent);
+      border-radius: var(--radius-3);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+    }
+
+    .panel__head {
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+
+    .panel__title {
+      margin: 0;
+      font-size: var(--fs-3);
+      letter-spacing: -0.02em;
+    }
+
+    .panel__body { padding: var(--space-3); }
+
+    .field {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: var(--space-3);
+    }
+
+    .field label {
+      font-weight: 800;
+      font-size: var(--fs-1);
+      color: var(--muted);
+    }
+
+    .input, .select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 80%, transparent);
+      color: var(--text);
+      outline: none;
+      font-size: var(--fs-2);
+    }
+
+    .input::placeholder { color: var(--muted-2); }
+    .input:focus, .select:focus { box-shadow: var(--focus); border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+
+    .panel__actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--muted-2);
+      font-size: var(--fs-1);
+    }
+
+    /* Content */
+    .content {
+      padding: 0 0 var(--space-6);
+    }
+
+    .section {
+      margin-top: var(--space-5);
+    }
+
+    .section__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .section__title {
+      margin: 0;
+      font-size: var(--fs-5);
+      letter-spacing: -0.03em;
+    }
+
+    .section__desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: var(--fs-2);
+    }
+
+    /* Cards grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    @media (min-width: 700px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 72%, transparent);
+      border-radius: var(--radius-2);
+      padding: var(--space-3);
+      box-shadow: var(--shadow-1);
+      transition: transform .14s ease, border-color .14s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--border) 35%, var(--accent));
+    }
+
+    .card__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-2);
+      margin-bottom: var(--space-2);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: var(--fs-1);
+      font-weight: 800;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface-2) 75%, transparent);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .tag--feat { border-color: color-mix(in srgb, var(--good) 50%, var(--border)); }
+    .tag--fix { border-color: color-mix(in srgb, var(--warn) 55%, var(--border)); }
+    .tag--breaking { border-color: color-mix(in srgb, var(--bad) 55%, var(--border)); }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: var(--fs-3);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: var(--fs-2);
+    }
+
+    .card__meta {
+      margin-top: var(--space-3);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted-2);
+      font-size: var(--fs-1);
+      font-weight: 700;
+    }
+
+    .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 65%, transparent);
+    }
+
+    /* Timeline */
+    .timeline {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: var(--space-3);
+      border-radius: var(--radius-2);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 72%, transparent);
+      box-shadow: var(--shadow-1);
+    }
+
+    @media (min-width: 900px) {
+      .timeline-item {
+        grid-template-columns: 160px 1fr;
+        align-items: start;
+      }
+    }
+
+    .timeline-date {
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      font-size: var(--fs-2);
+    }
+
+    .timeline-bullets {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .timeline-bullets li { margin: 6px 0; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      padding: var(--space-5) 0;
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      align-items: start;
+    }
+
+    @media (min-width: 900px) {
+      .footer__grid { grid-template-columns: 1.2fr 0.8fr; }
+    }
+
+    .footer__title {
+      margin: 0 0 8px;
+      font-size: var(--fs-3);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .footer__text {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .footer__links {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    @media (min-width: 900px) {
+      .footer__links { justify-content: flex-end; }
+    }
+
+    /* Small helpers */
+    .divider { height: 1px; background: var(--border); margin: var(--space-4) 0; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar" role="banner">
+    <div class="container">
+      <div class="topbar__inner">
+        <a class="brand" href="#top" aria-label="Release Notes 홈">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">Release Notes</span>
+        </a>
+
+        <nav class="nav" aria-label="주요 메뉴">
+          <a href="#highlights">Highlights</a>
+          <a href="#all">All changes</a>
+          <a href="#timeline">Timeline</a>
+        </nav>
+
+        <div class="actions">
+          <a class="btn btn--primary" href="#all">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            최신 업데이트 보기
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="헤더 영역">
+      <div class="container">
+        <div class="hero__grid">
+          <div>
+            <div class="kicker">
+              <span class="kicker__dot" aria-hidden="true"></span>
+              <span>릴리즈 노트 · 업데이트 내역</span>
+            </div>
+
+            <h1>더 빠르고, 더 안정적인 업데이트를
+              <br />한 곳에서 확인하세요.</h1>
+            <p class="subtitle">버전별 주요 변경 사항, 기능 개선, 버그 수정 내용을 정리했습니다. 검색/필터로 필요한 업데이트만 빠르게 찾아볼 수 있어요.</p>
+
+            <div class="hero__meta" aria-label="요약 정보">
+              <span class="chip"><strong id="latestVersion">v1.1.1</strong> · 최신</span>
+              <span class="chip"><strong id="latestDate">2026-02-24</strong> · 업데이트</span>
+              <span class="chip">총 <strong id="totalCount">9</strong>개 항목</span>
+            </div>
+
+            <div class="panel__actions">
+              <a class="btn" href="#timeline">타임라인 보기</a>
+              <a class="btn" href="#highlights">하이라이트</a>
+            </div>
+          </div>
+
+          <aside class="panel" aria-label="검색 및 필터">
+            <div class="panel__head">
+              <h2 class="panel__title">검색/필터</h2>
+              <span class="tag" id="resultCount">9 results</span>
+            </div>
+            <div class="panel__body">
+              <div class="field">
+                <label for="q">키워드</label>
+                <input class="input" id="q" name="q" type="search" placeholder="예: 로그인, 성능, 알림" autocomplete="off" />
+              </div>
+
+              <div class="field">
+                <label for="type">유형</label>
+                <select class="select" id="type" name="type">
+                  <option value="all">전체</option>
+                  <option value="feature">Feature</option>
+                  <option value="fix">Fix</option>
+                  <option value="breaking">Breaking</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="version">버전</label>
+                <select class="select" id="version" name="version">
+                  <option value="all">전체</option>
+                  <option value="1.1.1">1.1.1</option>
+                  <option value="1.1.0">1.1.0</option>
+                  <option value="1.0.0">1.0.0</option>
+                </select>
+              </div>
+
+              <p class="hint">Tip: 키워드와 유형/버전을 함께 선택하면 결과가 좁혀집니다.</p>
+
+              <div class="panel__actions">
+                <button class="btn" type="button" id="clear">초기화</button>
+                <button class="btn btn--primary" type="button" id="copyLink">검색 링크 복사</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="content" aria-label="릴리즈 노트 본문">
+      <div class="container">
+
+        <section id="highlights" class="section" aria-label="하이라이트">
+          <div class="section__head">
+            <div>
+              <h2 class="section__title">Highlights</h2>
+              <p class="section__desc">최근 버전에서 가장 중요한 변경 사항만 모았습니다.</p>
+            </div>
+          </div>
+
+          <div class="grid" id="highlightGrid">
+            <!-- Highlight cards injected by JS -->
+          </div>
+        </section>
+
+        <div class="divider" role="separator" aria-hidden="true"></div>
+
+        <section id="all" class="section" aria-label="전체 변경 사항">
+          <div class="section__head">
+            <div>
+              <h2 class="section__title">All changes</h2>
+              <p class="section__desc">모든 변경 항목을 카드 형태로 확인할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div class="grid" id="cardGrid">
+            <!-- Cards injected by JS -->
+          </div>
+        </section>
+
+        <div class="divider" role="separator" aria-hidden="true"></div>
+
+        <section id="timeline" class="section" aria-label="버전 타임라인">
+          <div class="section__head">
+            <div>
+              <h2 class="section__title">Timeline</h2>
+              <p class="section__desc">버전 단위로 묶어서 변경 사항을 빠르게 훑어보세요.</p>
+            </div>
+          </div>
+
+          <div class="timeline" id="timelineList">
+            <!-- Timeline injected by JS -->
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <p class="footer__title">Release Notes</p>
+          <p class="footer__text">디자인은 Figma 시안을 기준으로 쉽게 커스터마이징할 수 있도록 구성했습니다. 실제 문구/버전/항목은 데이터 배열만 수정하면 됩니다.</p>
+        </div>
+        <div class="footer__links" aria-label="푸터 링크">
+          <a class="btn" href="#top">맨 위로</a>
+          <a class="btn" href="#all">전체 변경</a>
+          <a class="btn" href="#timeline">타임라인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Minimal client-side rendering & filtering (no framework)
+
+    let DATA = [];
+
+    async function loadData() {
+      const res = await fetch('data.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error(`Failed to load data.json (${res.status})`);
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error('data.json must be an array');
+      return json;
+    }
+
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+    const qEl = $('#q');
+    const typeEl = $('#type');
+    const versionEl = $('#version');
+    const clearEl = $('#clear');
+    const copyLinkEl = $('#copyLink');
+    const resultCountEl = $('#resultCount');
+
+    const cardGrid = $('#cardGrid');
+    const highlightGrid = $('#highlightGrid');
+    const timelineList = $('#timelineList');
+
+    function setHeaderSummary() {
+      if (!DATA.length) {
+        $('#latestVersion').textContent = 'v-';
+        $('#latestDate').textContent = '-';
+        $('#totalCount').textContent = '0';
+        return;
+      }
+      const latest = DATA.slice().sort((a,b) => (a.date < b.date ? 1 : -1))[0];
+      $('#latestVersion').textContent = `v${latest.version}`;
+      $('#latestDate').textContent = latest.date;
+      $('#totalCount').textContent = String(DATA.length);
+    }
+
+    function typeLabel(type) {
+      if (type === 'feature') return 'Feature';
+      if (type === 'fix') return 'Fix';
+      if (type === 'breaking') return 'Breaking';
+      return 'Item';
+    }
+
+    function tagClass(type) {
+      if (type === 'feature') return 'tag tag--feat';
+      if (type === 'fix') return 'tag tag--fix';
+      if (type === 'breaking') return 'tag tag--breaking';
+      return 'tag';
+    }
+
+    function iconFor(type) {
+      if (type === 'feature') {
+        return '<svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
+      }
+      if (type === 'fix') {
+        return '<svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      }
+      if (type === 'breaking') {
+        return '<svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 9v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.3 3.6 2.1 18a2 2 0 0 0 1.7 3h16.4a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
+      }
+      return '';
+    }
+
+    function cardTemplate(item) {
+      const titleId = `t-${item.id}`;
+      return `
+        <article class="card" data-id="${item.id}" data-type="${item.type}" data-version="${item.version}" data-date="${item.date}" aria-labelledby="${titleId}">
+          <div class="card__top">
+            <span class="${tagClass(item.type)}">${iconFor(item.type)}${typeLabel(item.type)}</span>
+            <span class="tag">v${item.version}</span>
+          </div>
+          <h3 id="${titleId}">${item.title}</h3>
+          <p>${item.desc}</p>
+          <div class="card__meta" aria-label="메타 정보">
+            <span class="meta">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 7V3m8 4V3M4 11h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/></svg>
+              ${item.date}
+            </span>
+            ${(item.meta || []).map(m => `<span class="meta">${m}</span>`).join('')}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderHighlights(items) {
+      const highlights = items.filter(x => x.highlight);
+      highlightGrid.innerHTML = highlights.map(cardTemplate).join('');
+    }
+
+    function renderCards(items) {
+      cardGrid.innerHTML = items.map(cardTemplate).join('');
+    }
+
+    function renderTimeline(items) {
+      const byVersion = new Map();
+      for (const it of items) {
+        const key = `${it.version}__${it.date}`;
+        if (!byVersion.has(key)) byVersion.set(key, []);
+        byVersion.get(key).push(it);
+      }
+
+      const groups = Array.from(byVersion.entries())
+        .map(([key, arr]) => {
+          const [version, date] = key.split('__');
+          return {
+            version,
+            date,
+            items: arr,
+          };
+        })
+        .sort((a,b) => (a.date < b.date ? 1 : -1));
+
+      timelineList.innerHTML = groups.map(g => {
+        const bullets = g.items
+          .slice()
+          .sort((a,b) => (a.type > b.type ? 1 : -1))
+          .map(it => `<li><strong>${typeLabel(it.type)}:</strong> ${it.title}</li>`)
+          .join('');
+
+        return `
+          <article class="timeline-item" aria-label="버전 v${g.version} (${g.date})">
+            <div>
+              <div class="timeline-date">v${g.version}</div>
+              <div class="hint">${g.date}</div>
+            </div>
+            <div>
+              <ul class="timeline-bullets">${bullets}</ul>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function normalize(s) {
+      return (s || '').toLowerCase().trim();
+    }
+
+    function applyFilters() {
+      const q = normalize(qEl.value);
+      const type = typeEl.value;
+      const version = versionEl.value;
+
+      let filtered = DATA.slice();
+
+      if (type !== 'all') filtered = filtered.filter(x => x.type === type);
+      if (version !== 'all') filtered = filtered.filter(x => x.version === version);
+      if (q) {
+        filtered = filtered.filter(x => {
+          const hay = normalize([x.title, x.desc, x.version, x.type, ...(x.meta || [])].join(' '));
+          return hay.includes(q);
+        });
+      }
+
+      // Sort newest first
+      filtered.sort((a,b) => (a.date < b.date ? 1 : -1));
+
+      resultCountEl.textContent = `${filtered.length} results`;
+      renderCards(filtered);
+
+      // Keep highlights: show only highlights matching filters for consistency
+      renderHighlights(filtered);
+
+      // Keep timeline always based on filtered
+      renderTimeline(filtered);
+
+      // Update URL params
+      const params = new URLSearchParams(window.location.search);
+      q ? params.set('q', q) : params.delete('q');
+      type !== 'all' ? params.set('type', type) : params.delete('type');
+      version !== 'all' ? params.set('version', version) : params.delete('version');
+      const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    function hydrateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q') || '';
+      const type = params.get('type') || 'all';
+      const version = params.get('version') || 'all';
+      qEl.value = q;
+      typeEl.value = ['all','feature','fix','breaking'].includes(type) ? type : 'all';
+      versionEl.value = ['all','1.1.1','1.1.0','1.0.0'].includes(version) ? version : 'all';
+    }
+
+    // URL mode override: ?mode=dark (or ?mode=light)
+    function applyModeFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+      if (mode === 'dark' || mode === 'light') {
+        document.documentElement.dataset.theme = mode;
+      } else {
+        // Remove explicit override to fall back to prefers-color-scheme
+        delete document.documentElement.dataset.theme;
+      }
+    }
+
+    applyModeFromUrl();
+
+    // Events
+    [qEl, typeEl, versionEl].forEach(el => {
+      el.addEventListener('input', applyFilters);
+      el.addEventListener('change', applyFilters);
+    });
+
+    clearEl.addEventListener('click', () => {
+      qEl.value = '';
+      typeEl.value = 'all';
+      versionEl.value = 'all';
+      applyFilters();
+    });
+
+    copyLinkEl.addEventListener('click', async () => {
+      const url = window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        copyLinkEl.textContent = '복사됨';
+        setTimeout(() => (copyLinkEl.textContent = '검색 링크 복사'), 900);
+      } catch {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        copyLinkEl.textContent = '복사됨';
+        setTimeout(() => (copyLinkEl.textContent = '검색 링크 복사'), 900);
+      }
+    });
+
+
+    // Initial render
+    (async function init() {
+      try {
+        DATA = await loadData();
+      } catch (e) {
+        console.error(e);
+        resultCountEl.textContent = '0 results';
+        cardGrid.innerHTML = '<div class="card" role="alert"><h3>데이터를 불러오지 못했습니다</h3><p>data.json 로딩에 실패했습니다. 로컬에서 파일로 직접 열면(fetch 제한) 발생할 수 있으니, 간단한 웹서버로 실행해 주세요.</p></div>';
+        highlightGrid.innerHTML = '';
+        timelineList.innerHTML = '';
+        DATA = [];
+      }
+
+      setHeaderSummary();
+      hydrateFromUrl();
+      applyFilters();
+    })();
+
+  </script>
+</body>
+</html>
